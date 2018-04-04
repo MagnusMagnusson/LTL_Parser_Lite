@@ -1,0 +1,1 @@
+Invalid Combinations:G(~((((((wolf_left)&(goat_left))&(~(employee_left))|((wolf_right)&(goat_right))&(~(employee_right)))|(((popeye_left)&(spinach_left))&(~(employee_left))))|(((popeye_right)&(spinach_right))&(~(employee_right))))|(((popeye_left)&(spinach_left))&((~(employee_left))&(computer_left))|(((popeye_right)&(spinach_right))&((~(employee_right))&(computer_right))))))

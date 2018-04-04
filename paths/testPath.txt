@@ -1,0 +1,12 @@
+10 3
+p 
+p q
+p q
+p q
+p x z q
+p
+p
+loop p z
+p z
+p
+fake

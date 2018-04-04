@@ -20,7 +20,7 @@ class Token:
 	
 class lexer:
 	def statement(self, statement):
-		print(statement)
+		statement = statement.strip()
 		if(len(statement) == 0):
 			raise ValueError("Empty statement detected!")
 		operators = ["F","R","X","G","U","W","M","~","&","|","(",")"]
@@ -82,8 +82,6 @@ class lexer:
 			endPoint = i+1
 			break
 		psi = self.statement(psiStatement)
-		if(endPoint != len(statement)):
-			raise ValueError("Statement did not end after second binary predicate: " + statement)
 		
 		token = Token(operator,phi,psi,statement)
 		return token 

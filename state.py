@@ -20,9 +20,9 @@ class state:
 	def addStatement(self,statement):
 		if(statement in self.statements):
 			return
-		self.statements.add(statement)
+		self.statements.append(statement)
 		
-	def next(self):
+	def getNext(self):
 		return self.next
 	
 	def setNext(self,node):
