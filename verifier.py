@@ -7,7 +7,7 @@ class Verifier:
 
 	def __init__(self):
 		self.blame = False
-	def ge tBlame(self):
+	def getBlame(self):
 		S = self.blameStack.pop()			
 		lastState = S
 		N = False
