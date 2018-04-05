@@ -1,12 +1,12 @@
-10 3
+10 4
 p 
+p q r a
+p q r a
+p q r a
+p x z q r 
 p q
-p q
-p q
-p x z q
-p
-p
+p r a
 loop p z
 p z
 p
-fake
+p

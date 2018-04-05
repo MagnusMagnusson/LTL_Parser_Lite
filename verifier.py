@@ -1,9 +1,33 @@
 from state import *
 from lexer import *
+from LTL_tester import *
 
 # p ~ F X G U M W R & |
 class Verifier:
 
+	def __init__(self):
+		self.blame = False
+	def ge tBlame(self):
+		S = self.blameStack.pop()			
+		lastState = S
+		N = False
+		failedOperators = []
+		while(S[2] == N):
+			if(S[0].operator == '~'):
+				N = not N
+			lastState = S
+			failedOperators.append(S)
+			S = self.blameStack.pop()
+		S = lastState
+		return (S,failedOperators)
+
+		
+	def blameEval(self,token,state):
+		self.blame = True
+		self.blameStack = []
+		s = self.eval(token,state)
+		self.blame = False
+		return s
 	def eval(self,token,state):
 		if(token.statement in state.getStatements()):
 			return True
@@ -33,6 +57,10 @@ class Verifier:
 			s = self.both(token,state)
 		elif(o == "|"):
 			s = self.either(token,state)
+		elif(o==">"):
+			s = self.implies(token,state)
+		elif(o=="="):
+			s = self.equals(token,state)
 			
 		if(s == None):
 			raise ValueError("Unknown token operator " + token.operator)
@@ -41,6 +69,8 @@ class Verifier:
 			state.addStatement(token.statement)
 		else:
 			state.addStatement("~("+token.statement+")")
+		if(self.blame):
+			self.blameStack.append((token,state,s))
 			
 		return s
 		
@@ -60,10 +90,12 @@ class Verifier:
 		if(self.eval(token.phi,state)):
 			return True
 		visited = []
+
 		state = state.getNext()
-		while(state != None and state != firstState):
+		while(state != None and state.id not in visited):
 			if(self.eval(token.phi,state)):
 				return True
+			visited.append(state.id)
 			state = state.getNext()
 		return False
 		
@@ -88,26 +120,32 @@ class Verifier:
 		return True
 		
 	def U(self,token,state):
+		print("AAAAAAAAAAAAAAAA")
 		phi = token.phi 
 		psi = token.psi
 		
 		if(self.eval(psi,state)):
+			print(str(state.id) + " INSTA FREE")
 			return True
 		else:
 			if(not self.eval(phi,state)):
+				print(state.id + " (Instant deliver) Broke U")
 				return False 
 		
 		visited = []
 		state = state.next
 		while(state != None and state.id not in visited):
 			if(self.eval(psi,state)):
+				print(str(state.id) + " FREE")
 				return True
 			else:
 				if(not self.eval(phi,state)):
+					print(state.id + " (Late deliver) Broke U")
 					return False 
 			visited.append(state.id)
 			state = state.getNext()
 			
+		print(state.id + " (Never) Broke U")
 		return False #Psi must hold in the end, we got into a dead end and never saw it.
 		
 	def M(self,token,state):
@@ -176,5 +214,10 @@ class Verifier:
 			state = state.getNext()
 			
 		return False 
-	
+		
+	def implies(self,token,state):
+		return (not self.eval(token.phi,state)) or (self.eval(token.psi,state))
+		
+	def equals(self,token,state):
+		return self.eval(token.phi,state) == self.eval(token.psi,state)
 # p ~ F X G U M W R & |

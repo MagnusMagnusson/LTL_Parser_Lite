@@ -1,5 +1,5 @@
 # Accepted language:
-# + = F(+) : X(+) : G(+) : ~(+) : (+)R(+) : (+)M(+) : (+)U(+) : (+)W(+) : (+)&(+) : (+)|(+) : p
+# + = F(+) : X(+) : G(+) : ~(+) : (+)R(+) : (+)M(+) : (+)U(+) : (+)W(+) : (+)&(+) : (+)|(+) : > : p
 class Token:
 	def __init__(self,operator,phi,psi,statement):
 		self.operator = operator
@@ -23,7 +23,7 @@ class lexer:
 		statement = statement.strip()
 		if(len(statement) == 0):
 			raise ValueError("Empty statement detected!")
-		operators = ["F","R","X","G","U","W","M","~","&","|","(",")"]
+		operators = ["F","R","X","G","U","W","M","~","&","|","(",")",">"]
 		proposition = True
 		for o in operators:
 			if(o in statement):
@@ -60,7 +60,7 @@ class lexer:
 		
 		phi = self.statement(phiStatement)
 		
-		binary = ["R","M","W","U","&","|"]
+		binary = ["R","M","W","U","&","|",">","="]
 		if(not statement[endPoint] in binary):
 			raise ValueError("Missing binary operator: " + statement)
 		
