@@ -106,7 +106,9 @@ if __name__ == "__main__":
 							print("            State propositions: " + str(blameState[0][1].getVariables()) + bcolors.ENDC)
 							if(trace):
 								for S in blameState[1]:
-									print(bcolors.WARNING+ ">           infringing statement: " + bcolors.OKBLUE + S[0].statement)
-									print(bcolors.WARNING+ ">>            Operator in question: " + bcolors.OKBLUE + S[0].operator)
-									print(bcolors.WARNING+ ">>>            Returned " + bcolors.OKBLUE + str(S[2]) + ", expected " +str(not S[2]))
-									print(bcolors.WARNING+ ">>>            State in question: " + bcolors.OKBLUE + str(S[1].getVariables) + bcolors.ENDC)
+									print(bcolors.WARNING+ ">           infringing statement: " + bcolors.OKBLUE + S[0].statement )
+									print(bcolors.WARNING+ ">>            Operator in question: "  + bcolors.ENDC + S[0].operator)
+									c1 = bcolors.FAIL if  not S[2] else bcolors.OKGREEN
+									c2 = bcolors.FAIL if  S[2] else bcolors.OKGREEN
+									print(bcolors.WARNING+ ">>>             Returned " + c1 + str(S[2]) + ", expected " +c2+str(not S[2]))
+									print(bcolors.WARNING+ ">>>>              State "+str(S[1].id)+": " + bcolors.ENDC + str(S[1].getVariables()))
