@@ -42,8 +42,7 @@ class Parser:
 			fileobj.close()
 			paths.append(beginnerNode)
 			
-		return paths
-		
+		return paths	
 	
 	def parseEquations(self,files):
 		equations = []
@@ -51,8 +50,14 @@ class Parser:
 			fileobj = open(file, "r")
 			lex = lexer.lexer()
 			for line in fileobj:
+				line = line.replace("\n","")
 				rule = line.split(':')
+				if(len(rule) != 2):
+					continue
 				try:
+					if(rule[0][0] == '{' and rule[0][-1] == '}'):
+						lex.addVariable(rule[0],lex.statement(rule[1]))
+						continue
 					rootToken = lex.statement(rule[1])
 					equations.append((rule[0],rootToken))
 				except ValueError as E:

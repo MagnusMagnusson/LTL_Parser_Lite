@@ -19,11 +19,20 @@ class Token:
 			self.psi.printTree(level + 1)
 	
 class lexer:
+	def __init__(self):
+		self.variables = {}
+	def addVariable(self,variable,definition):
+		self.variables[variable] = definition
+	def getVariable(self,variable):
+		return self.variables[variable]
+	def getAllVariables(self):
+		return self.variables.keys()
+		
 	def statement(self, statement):
 		statement = statement.strip()
-		if(len(statement) == 0):
-			raise ValueError("Empty statement detected!")
-		operators = ["F","R","X","G","U","W","M","~","&","|","(",")",">"]
+		
+		operators = ["F","R","X","G","U","W","M","~","&","|","(",")",">","=","{","}"]
+		
 		proposition = True
 		for o in operators:
 			if(o in statement):
@@ -35,6 +44,38 @@ class lexer:
 				raise ValueError("Propositions must be lower case: " + statement)
 			token = Token("proposition",None,None,statement)
 			return token
+		
+		if(len(statement) == 0):
+			raise ValueError("Empty statement detected!")
+		if(statement[0] == '('):
+			c = 0
+			for i in range(len(statement)):
+				character = statement[i]
+				if character == '(':
+					c += 1
+				if character == ')':
+					c -= 1
+				if c == 0:
+					if i == len(statement) - 1:
+						newStatement = statement[1:-1]
+						return self.statement(newStatement)
+					else:
+						break
+		if(statement[0] == '{' and statement[-1] == '}'):			
+			c = 0
+			for i in range(len(statement)):
+				character = statement[i]
+				if character == '{':
+					c += 1
+				if character == '}':
+					c -= 1
+				if c == 0:
+					if i == len(statement) - 1:
+						return self.getVariable(statement)
+					else:
+						break
+			
+					
 		unary = ["F","X","G","~"]
 		if(statement[0] in unary):
 			operator = statement[0]
@@ -85,4 +126,3 @@ class lexer:
 		
 		token = Token(operator,phi,psi,statement)
 		return token 
-	
