@@ -2,6 +2,7 @@ import sys
 import os
 from os import listdir
 from os.path import isfile, join
+sys.path.append('scripts/')
 import pathParser
 from verifier import * 
 
@@ -16,16 +17,34 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 	
-if __name__ == "__main__":
-	print("===================================================")
-	print("======= Welcome to the LTL model checker. =========")
-	print("===================================================")
-	
+def printHelp():	
+	print(bcolors.HEADER +"LTL model checker help"+bcolors.ENDC)
+	print("\n")
+	print("Usage: "+ sys.argv[0] + " [OPTIONS] [PATHS] [RULES]")
+	print("[OPTIONS] : optional program parameters for specific option behaviors (see below)")
+	print("[PATHS] : File or directory containing path files. Every file found in the specified directory will be tested. Non-recursive")
+	print("[RULES] : File or directory containing LTL rules to test against. Every file found in the specified directory will be tested against. Non-recursive")
+	print("\n")
+	print("OPTIONS:")
+	print("'s' : 'Silent'. Will cause the program to output as little as it can, only printing negative test results")
+	print("'b' : 'Blame'. Any test that fails will output the state where the test is suspected to have failed in, along with its propositions")
+	print("'t' : 'Trace'. Any test that fails will print out the entire evaluation stack trace leading to the failed rule. Requires 'Blame'") 
+if __name__ == "__main__":	
+
 	argument_count = len(sys.argv)
-	if(argument_count != 3 and argument_count != 4):
-		print("Usage error. Please call the program as follows:\n")
-		print("'python "+ sys.argv[0] + " -[optional options] [path file or directory] [ruleset file or directory]'")
+	if(argument_count == 2 and sys.argv[1] == "--help"):
+		printHelp()
 		sys.exit(0)
+	if(argument_count != 3 and argument_count != 4):
+		print("Usage: "+ sys.argv[0] + " [OPTIONS] [PATHS] [RULES]")
+		print("Try '"+ sys.argv[0] + " --help' for help")
+		sys.exit(0)
+		
+	print(bcolors.HEADER +"===================================================")
+	print("======= Welcome to the LTL model checker. =========")
+	print("===================================================" +bcolors.ENDC)
+	
+
 		
 	i = 0
 	silent = False

@@ -126,3 +126,67 @@ class lexer:
 		
 		token = Token(operator,phi,psi,statement)
 		return token 
+		
+	def parse(self,statement):
+		precedence = [["R","U","W","M"],[">","="],["&","|"],["G","F","X"],["~"]]
+		i = 0
+		for group in precedence:
+			i = 0
+			while i < len(statement):
+				char = statement[i]
+				if(char in group):
+					binary = ["R","U","W","M",">","=","&","|"]
+					s1 = statement[:i]
+					s2 = statement[i+1:]
+					if(char in binary):
+						return "("+self.parse(s1)+")"+char+"("+self.parse(s2)+")"
+					else:
+						return  self.parse(s1)+char+"("+self.parse(s2)+")"
+				i+=1
+		return statement
+			
+	def enclosed(self,string):
+	  if(len(string) == 0):
+		return True
+		
+	  if(string[0] != "("):
+		return False
+	  c = 0
+	  for j in range(len(string)):
+		char2 = string[j]
+		if(char2 == '('):
+		  c += 1 
+		if(char2 == ')'):
+		  c -= 1
+		if(c == 0):
+		  return j == len(string) - 1
+	  return True
+	  
+	def extraParen(self,string):
+	  returnString = ""
+	  i = 0
+	  while i < len(string):
+		char = string[i]
+		if(char == '('):
+		  s = ""
+		  c = 0
+		  for j in range(i,len(string)):
+			char2 = string[j]
+			s += char2
+			if(char2 == '('):
+			  c += 1 
+			if(char2 == ')'):
+			  c -= 1
+			if(c == 0):
+			  break
+		  i = j
+		  inner = self.extraParen(s[1:-1])
+		  if(self.enclosed(inner)):
+			returnString += inner
+		  else:
+			returnString += "("+inner+")"
+		else:
+		  returnString += char
+		
+		i += 1
+	  return returnString
