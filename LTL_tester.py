@@ -29,6 +29,9 @@ def printHelp():
 	print("'s' : 'Silent'. Will cause the program to output as little as it can, only printing negative test results")
 	print("'b' : 'Blame'. Any test that fails will output the state where the test is suspected to have failed in, along with its propositions")
 	print("'t' : 'Trace'. Any test that fails will print out the entire evaluation stack trace leading to the failed rule. Requires 'Blame'") 
+	print("'g' : 'Grayscale'. Disables colors in output. Preferable for shells that do not support ANSI escape codes.") 
+
+	
 if __name__ == "__main__":	
 
 	argument_count = len(sys.argv)
@@ -59,6 +62,12 @@ if __name__ == "__main__":
 		collect = 'c' in options
 		blame = 'b' in options
 		trace = 't' in options
+		if('g' in options):
+			bcolors.OKGREEN = ""
+			bcolors.OKBLUE = ""
+			bcolors.FAIL = ""
+			bcolors.ENDC = ""
+			bcolors.WARNING = ""
 		
 	paths = sys.argv[1+i]
 	rules = sys.argv[2+i]

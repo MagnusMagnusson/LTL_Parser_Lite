@@ -1,5 +1,22 @@
 # Accepted language:
-# + = F(+) : X(+) : G(+) : ~(+) : (+)R(+) : (+)M(+) : (+)U(+) : (+)W(+) : (+)&(+) : (+)|(+) : > : p
+# [Formula] := F([Formula])
+## X([Formula]) 
+##G([Formula])
+##~([Formula])
+##([Formula])R([Formula])
+##([Formula])M([Formula])
+##([Formula])U([Formula])
+##([Formula])W([Formula])
+##([Formula])&([Formula])
+##([Formula])|([Formula])
+##([Formula])>([Formula])
+##([Formula])=([Formula])
+##([Formula]) 
+## [Proposition]
+## {[Variable]}
+# [Variable] := [Formula]
+# [Proposition] := [Any lower case letter and symbol not already included in the language]
+
 class Token:
 	def __init__(self,operator,phi,psi,statement):
 		self.operator = operator
@@ -128,6 +145,7 @@ class lexer:
 		return token 
 		
 	def parse(self,statement):
+		stack = []
 		precedence = [["R","U","W","M"],[">","="],["&","|"],["G","F","X"],["~"]]
 		i = 0
 		for group in precedence:
