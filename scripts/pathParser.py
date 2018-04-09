@@ -51,6 +51,7 @@ class Parser:
 			lex = lexer.lexer()
 			for line in fileobj:
 				line = line.replace("\n","")
+				line = line.replace("	","")
 				rule = line.split(':')
 				if(len(rule) != 2):
 					continue

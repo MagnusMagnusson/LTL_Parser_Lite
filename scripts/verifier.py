@@ -12,7 +12,7 @@ class Verifier:
 		lastState = S
 		N = False
 		failedOperators = []
-		while(S[2] == N):
+		while(S[2] == N and len(self.blameStack)) > 0:
 			if(S[0].operator == '~'):
 				N = not N
 			lastState = S
