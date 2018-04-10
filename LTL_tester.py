@@ -6,7 +6,7 @@ sys.path.append('scripts/')
 import pathParser
 from verifier import * 
 
-
+#ANSI colors for that ~cool~ output. 
 class bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -16,7 +16,8 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
-	
+
+#Prints out the help. This comment isn't all that required. 
 def printHelp():	
 	print(bcolors.HEADER +"LTL model checker help"+bcolors.ENDC)
 	print("\n")
@@ -33,6 +34,7 @@ def printHelp():
 	print("'l' : 'Lazy'. The program will not attempt to parse incoming rules, allowing for greater control of the priorities, but might lead to undefined behavior. ") 
 
 	
+
 if __name__ == "__main__":	
 
 	argument_count = len(sys.argv)
@@ -49,7 +51,7 @@ if __name__ == "__main__":
 	print("===================================================" +bcolors.ENDC)
 	
 
-		
+	#Option parsing
 	i = 0
 	silent = False
 	lazy = False
@@ -70,6 +72,7 @@ if __name__ == "__main__":
 			bcolors.ENDC = ""
 			bcolors.WARNING = ""
 		
+	#File locating
 	paths = sys.argv[1+i]
 	rules = sys.argv[2+i]
 	
@@ -104,6 +107,7 @@ if __name__ == "__main__":
 	print("Path files being tested:\n" + str(allPaths)+"\n")
 	print("Rule files being tested:\n" + str(allRules)+"\n")
 	
+	#A tautological conditional, here as a permanent statement that this section once had a bug and needed to skip the rest of the program.
 	if True:
 		p = pathParser.Parser()
 		v = Verifier()
@@ -116,6 +120,7 @@ if __name__ == "__main__":
 			for r in allRules:
 				if(not silent):
 					print("    Testing ruleset " + r)
+				#TODO when I look at this again in the future: Make it so that rules aren't regenerated every single path. 
 				expressions = p.parseEquations([r],lazy)
 				for expression in expressions:
 					if(not silent):
