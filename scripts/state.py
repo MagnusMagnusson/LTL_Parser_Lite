@@ -1,3 +1,4 @@
+#A state/vertex in a singly linked, directed graph. Includes propositions and proven rules for the state. 
 class state:
 	def __init__(self):
 		self.next = None

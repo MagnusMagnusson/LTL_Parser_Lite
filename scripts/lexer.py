@@ -17,7 +17,7 @@
 # [Variable] := [Formula]
 # [Proposition] := [Any lower case letter and symbol not already included in the language]
 
-#Lexes the rules and interprets them. 
+#A Token to store operators and subtrees
 class Token:
 	def __init__(self,operator,phi,psi,statement):
 		self.operator = operator
@@ -36,6 +36,7 @@ class Token:
 		if(self.psi != None):
 			self.psi.printTree(level + 1)
 	
+#I kind of did this twice, even if I probably should not have, since I was solving a different problem with a similar solution as the general lexer
 class Symbol:
 	def __init__(self,phi,psi,statement):
 		self.phi = phi 
@@ -50,7 +51,7 @@ class Symbol:
 			s2 = "("+self.psi.toString()+")"
 		return s1 + self.op + s2
 	
-
+#Lexes rules / expressions so they can be validated. 
 class lexer:
 	def __init__(self):
 		self.variables = {}
@@ -61,6 +62,7 @@ class lexer:
 	def getAllVariables(self):
 		return self.variables.keys()
 		
+	#Takes in a statement (string) and returns a Token() tree representing said statement. 
 	def statement(self, statement):
 		statement = statement.strip()
 		
@@ -160,6 +162,7 @@ class lexer:
 		token = Token(operator,phi,psi,statement)
 		return token 
 		
+	#Takes in a statement(string) and returns a Symbol() tree that respects operator priority. 
 	def preParse(self,statement):
 		stack = []
 		operators = ['X','F','G','R','W','U','M','=','&','|','~','>']
@@ -197,6 +200,7 @@ class lexer:
 			i += 1
 		return self.stackParse(stack)
 	
+	#Helper function for preParse, takes in a stack and splits it into a symbol() tree according to precedent. 
 	def stackParse(self,stack):
 		if(len(stack)==0):
 			return None
@@ -219,7 +223,8 @@ class lexer:
 						postStack = stack[1+i:]
 						return Symbol(self.stackParse(prevStack),self.stackParse(postStack),simba)
 				i += 1
-			
+		
+	#Returns True if the string is enclosed by () 
 	def enclosed(self,string):
 	  if(len(string) == 0):
 		return True
@@ -237,6 +242,7 @@ class lexer:
 		  return j == len(string) - 1
 	  return True
 	  
+	 #Removes all extra parenths, so (((((a)))+((b)))) becomes ((a)+(b))
 	def extraParen(self,string):
 	  returnString = ""
 	  i = 0
