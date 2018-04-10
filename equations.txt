@@ -1,24 +1,24 @@
-	{w_left}:(((wolf_left)&(goat_left))&(~(employee_left)))
-	{w_right}:(((wolf_right)&(goat_right))&(~(employee_right)))
+{w_left}:(((wolf_left)&(goat_left))&(~(employee_left)))
+{w_right}:(((wolf_right)&(goat_right))&(~(employee_right)))
 Wolf vs goats:~(F(({w_left})|({w_right})))
 
-	{popeye_left}:((popeye_left)&(spinach_left))&(~(employee_left))
-	{popeye_right}:((popeye_right)&(spinach_right))&(~(employee_right))
-	{popeye_left_right}:F(({popeye_left})|({popeye_right}))
+{popeye_left}:((popeye_left)&(spinach_left))&(~(employee_left))
+{popeye_right}:((popeye_right)&(spinach_right))&(~(employee_right))
+{popeye_left_right}:F(({popeye_left})|({popeye_right}))
 Popeye vs a can of leaves:~({popeye_left_right})
 
-	{alcohol_left}:((popeye_left)&(wine_left))&((~(employee_left))&(computer_left))
-	{alcohol_right}:((popeye_right)&(wine_right))&((~(employee_right))&(computer_right))
+{alcohol_left}:((popeye_left)&(wine_left))&((~(employee_left))&(computer_left))
+{alcohol_right}:((popeye_right)&(wine_right))&((~(employee_right))&(computer_right))
 Popeye vs alcoholism:~(F(({alcohol_left})|({alcohol_right})))
 
-	{left_break}:((employee_left)&(X(employee_left)))&((X(X(employee_left)))&(X(X(X(employee_left)))))
-	{right_break}:((employee_right)&(X(employee_right)))&((X(X(employee_right)))&(X(X(X(employee_right)))))
+{left_break}:((employee_left)&(X(employee_left)))&((X(X(employee_left)))&(X(X(X(employee_left)))))
+{right_break}:((employee_right)&(X(employee_right)))&((X(X(employee_right)))&(X(X(X(employee_right)))))
 Unscheduled break time:G(~(({left_break})|({right_break})))
 
 No hungry popeyes:(~(popeye_right))W(spinach_right)
 
-	{left_boat_passing}:G((employee_left)>(((employee_left)|(employee_trans))W(employee_right)))
-	{right_boat_passing}:G((employee_right)>(((employee_right)|(employee_trans))W(employee_left)))
+{left_boat_passing}:G((employee_left)>(((employee_left)|(employee_trans))W(employee_right)))
+{right_boat_passing}:G((employee_right)>(((employee_right)|(employee_trans))W(employee_left)))
 
 physical boats:({left_boat_passing})&({right_boat_passing})
 

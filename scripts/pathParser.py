@@ -1,10 +1,13 @@
 import lexer
 import state
 
+#Parses files and returns operator trees / lexical symbol tree and state path graphs.
 class Parser:
+	#A reminder that in the last project you ever handed for your BS degree you  accidentally left behind a constructor that printed "Why". 
 	def __init__(self):
 		self.yolo = "why"
-		print self.yolo
+		#print self.yolo
+	#Parses and returns a directed graph with propositions and rules. 
 	def parsePath(self,files):
 		paths = []
 		for file in files:
@@ -43,8 +46,8 @@ class Parser:
 			paths.append(beginnerNode)
 			
 		return paths	
-	
-	def parseEquations(self,files):
+	#Returns a 'binary' tree of tokens expressing the formula. 
+	def parseEquations(self,files,lazy = False):
 		equations = []
 		for file in files:
 			fileobj = open(file, "r")
@@ -59,6 +62,11 @@ class Parser:
 					if(rule[0][0] == '{' and rule[0][-1] == '}'):
 						lex.addVariable(rule[0],lex.statement(rule[1]))
 						continue
+					if(not lazy):
+						p = lex.preParse(rule[1])
+						if(p == None):
+							continue
+						rule[1] = lex.extraParen(p.toString())
 					rootToken = lex.statement(rule[1])
 					equations.append((rule[0],rootToken))
 				except ValueError as E:

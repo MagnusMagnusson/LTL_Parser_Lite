@@ -30,6 +30,7 @@ def printHelp():
 	print("'b' : 'Blame'. Any test that fails will output the state where the test is suspected to have failed in, along with its propositions")
 	print("'t' : 'Trace'. Any test that fails will print out the entire evaluation stack trace leading to the failed rule. Requires 'Blame'") 
 	print("'g' : 'Grayscale'. Disables colors in output. Preferable for shells that do not support ANSI escape codes.") 
+	print("'l' : 'Lazy'. The program will not attempt to parse incoming rules, allowing for greater control of the priorities, but might lead to undefined behavior. ") 
 
 	
 if __name__ == "__main__":	
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 		
 	i = 0
 	silent = False
-	collect = False
+	lazy = False
 	blame = False
 	trace = False
 	
@@ -59,7 +60,7 @@ if __name__ == "__main__":
 		i = 1
 		options = sys.argv[1]
 		silent = 's' in options
-		collect = 'c' in options
+		lazy = 'l' in options
 		blame = 'b' in options
 		trace = 't' in options
 		if('g' in options):
@@ -115,7 +116,7 @@ if __name__ == "__main__":
 			for r in allRules:
 				if(not silent):
 					print("    Testing ruleset " + r)
-				expressions = p.parseEquations([r])
+				expressions = p.parseEquations([r],lazy)
 				for expression in expressions:
 					if(not silent):
 						sys.stdout.write("        Testing rule '" + expression[0] + "\r")

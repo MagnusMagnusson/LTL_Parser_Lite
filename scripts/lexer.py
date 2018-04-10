@@ -17,6 +17,7 @@
 # [Variable] := [Formula]
 # [Proposition] := [Any lower case letter and symbol not already included in the language]
 
+#Lexes the rules and interprets them. 
 class Token:
 	def __init__(self,operator,phi,psi,statement):
 		self.operator = operator
@@ -35,6 +36,21 @@ class Token:
 		if(self.psi != None):
 			self.psi.printTree(level + 1)
 	
+class Symbol:
+	def __init__(self,phi,psi,statement):
+		self.phi = phi 
+		self.psi = psi
+		self.op = statement
+	def toString(self):
+		s1 = ""
+		s2 = ""
+		if(self.phi != None):
+			s1 = "("+self.phi.toString()+")"
+		if(self.psi != None):
+			s2 = "("+self.psi.toString()+")"
+		return s1 + self.op + s2
+	
+
 class lexer:
 	def __init__(self):
 		self.variables = {}
@@ -144,24 +160,65 @@ class lexer:
 		token = Token(operator,phi,psi,statement)
 		return token 
 		
-	def parse(self,statement):
+	def preParse(self,statement):
 		stack = []
-		precedence = [["R","U","W","M"],[">","="],["&","|"],["G","F","X"],["~"]]
+		operators = ['X','F','G','R','W','U','M','=','&','|','~','>']
 		i = 0
-		for group in precedence:
+		while i < len(statement):
+			s = ""
+			char = statement[i]
+			type = None
+			if not char in operators:
+				if(char == '('):
+					type = "EXPRESSION"
+					s += '('
+					c = 1
+					i += 1
+					while c != 0:
+						char = statement[i]
+						s += char
+						if(char == '('):
+							c += 1
+						if(char == ')'):
+							c -= 1
+						i += 1
+					stack.append((type,s[1:-1]))
+					continue
+				else:
+					type = "ATOM"
+					while i < len(statement) and not statement[i] in operators :
+						s += statement[i]
+						i+=1
+					stack.append((type,s))
+					continue
+				
+			else:
+				stack.append(("OPERATOR",char))
+			i += 1
+		return self.stackParse(stack)
+	
+	def stackParse(self,stack):
+		if(len(stack)==0):
+			return None
+		if(len(stack) == 1):
+			if(stack[0][0] == "ATOM"):
+				return Symbol(None,None,stack[0][1])
+			if(stack[0][0] == "EXPRESSION"):
+				return self.preParse(stack[0][1])
+		priority = [["R","W","U","M"],["=",">"],["&","|"],["G","F","X","~"]]
+		bin = ["R","W","U","M","=",">","&","|"]
+		for group in priority:
 			i = 0
-			while i < len(statement):
-				char = statement[i]
-				if(char in group):
-					binary = ["R","U","W","M",">","=","&","|"]
-					s1 = statement[:i]
-					s2 = statement[i+1:]
-					if(char in binary):
-						return "("+self.parse(s1)+")"+char+"("+self.parse(s2)+")"
-					else:
-						return  self.parse(s1)+char+"("+self.parse(s2)+")"
-				i+=1
-		return statement
+			while i < len(stack):
+				symbol = stack[i]
+				op = symbol[0]
+				simba = symbol[1]
+				if op == "OPERATOR":
+					if simba in group:
+						prevStack = stack[:i]
+						postStack = stack[1+i:]
+						return Symbol(self.stackParse(prevStack),self.stackParse(postStack),simba)
+				i += 1
 			
 	def enclosed(self,string):
 	  if(len(string) == 0):
@@ -208,3 +265,5 @@ class lexer:
 		
 		i += 1
 	  return returnString
+
+	  
