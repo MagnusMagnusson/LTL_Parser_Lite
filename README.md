@@ -1,5 +1,5 @@
 # LTL_Parser_Lite
-##Linear temporal logic 
+## Linear temporal logic lexer, parser, and validator
 
 A small set of python scripts meant to parse and validate Linear Temporal Logic. 
 This is just a homework project, but I enjoyed making it. 
